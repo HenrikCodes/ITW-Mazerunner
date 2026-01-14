@@ -1,0 +1,87 @@
+
+
+<?xml version="1.0" ?>
+<mujoco model="tilting_plate_ball">
+  
+  <!-- Global settings -->
+  <option timestep="0.001" gravity="0 0 -9.81">
+    <flag contact="enable" />
+  </option>
+  
+  <!-- Assets (colors, textures) -->
+  <asset>
+    <material name="plate_mat" rgba="0.8 0.8 0.8 1" />
+    <material name="ball_mat" rgba="1 0 0 1" />
+    <material name="ground_mat" rgba="0.5 0.5 0.5 1" />
+  </asset>
+  
+  <!-- World body containing everything -->
+  <worldbody>
+    
+    <!-- Ground plane (prevents ball from falling infinitely) -->
+    <geom name="ground" type="plane" pos="0 0 -0.5" size="2 2 0.1" 
+          material="ground_mat" />
+    
+    <!-- Tilting plate body -->
+    <!-- The plate rotates around x and y axes centered at origin -->
+    <body name="plate" pos="0 0 0">
+      
+      <!-- Plate geometry (box) -->
+      <geom name="plate_geom" type="box" 
+            size="0.15 0.15 0.01" 
+            material="plate_mat"
+            friction="0.3" />
+      
+      <!-- Plate visual (duplicate for clarity) -->
+      <inertial pos="0 0 0" mass="1.0">
+        <inertia diag="0.01 0.01 0.002" />
+      </inertial>
+      
+      <!-- Two joints allow rotation around x and y axes -->
+      <!-- Joint 1: Rotation around x-axis (pitch) -->
+      <joint name="plate_x" type="hinge" axis="1 0 0" 
+             range="-0.5236 0.5236" />
+      
+      <!-- Joint 2: Rotation around y-axis (roll) -->
+      <joint name="plate_y" type="hinge" axis="0 1 0" 
+             range="-0.5236 0.5236" />
+      
+      <!-- Ball rolling on the plate -->
+      <body name="ball" pos="0 0 0.02">
+        
+        <!-- Ball geometry (sphere) -->
+        <geom name="ball_geom" type="sphere" size="0.01" 
+              material="ball_mat"
+              friction="0.1" />
+        
+        <geom type="sphere" condim="3" />  <!-- 3D contact friction -->
+        <pair solref="0.02 1.0" solimp="0.95 0.99 0.001" />
+
+        <!-- Ball inertia (mass = 0.1 kg, radius = 0.01 m) -->
+        <inertial pos="0 0 0" mass="0.1">
+          <inertia diag="1.67e-6 1.67e-6 1.67e-6" />
+        </inertial>
+        
+        <!-- Ball can slide in x and y directions on plate -->
+        <!-- <joint name="ball_x" type="slide" axis="1 0 0" /> -->
+        <!-- <joint name="ball_y" type="slide" axis="0 1 0" /> -->
+        
+        <!-- Ball can roll around z-axis -->
+        <!-- <joint name="ball_z" type="hinge" axis="0 0 1" /> -->
+      </body>
+      
+    </body>
+  </worldbody>
+  
+  <!-- Actuators (controlled by agent) -->
+  <actuator>
+    <!-- Motor for plate x-axis rotation (torque control) -->
+    <motor name="plate_x_motor" joint="plate_x" 
+            ctrlrange="-5.0 5.0" ctrllimited="true" />
+    
+    <!-- Motor for plate y-axis rotation (torque control) -->
+    <motor name="plate_y_motor" joint="plate_y" 
+            ctrlrange="-5.0 5.0" ctrllimited="true" />
+  </actuator>
+  
+</mujoco>

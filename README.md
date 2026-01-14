@@ -1,5 +1,7 @@
 # ITW-Mazerunner
 Reinforcement learning based system to steer a ball on a tilting plate.
+<img src="Documentation/maze1.png" alt="Alt text" width="400">
+
 
 # Kurzanleitung
 

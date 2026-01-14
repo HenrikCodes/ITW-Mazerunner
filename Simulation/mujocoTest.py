@@ -1,8 +1,13 @@
+from pathlib import Path
 import mujoco
 import mujoco.viewer
 from mujoco import MjData, MjModel
 
-model = mujoco.MjModel.from_xml_path("ball_tilt_plate.xml")
+
+HERE = Path(__file__).resolve().parent              # .../Simulation
+xml_path = HERE / "ball_tilt_plate.xml"             # or "plate2.xml"
+
+model = mujoco.MjModel.from_xml_path(str(xml_path))
 data = MjData(model)
 
 with mujoco.viewer.launch_passive(model, data) as viewer:
