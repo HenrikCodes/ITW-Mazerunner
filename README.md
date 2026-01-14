@@ -59,6 +59,7 @@ git commit -m "Add/Update dependencies"
 - Testaufbau mit gymnasium
 - Darstellung des Environments
 - MVP mit Stable Baseline agent
+-> beide machen alles und wir fusionieren das gelernte
 
 ## Woche bis 25.01.26
 - Erweiterung der Simulation mit 3D TM3 oder Mujoco bzw. PyBullet
