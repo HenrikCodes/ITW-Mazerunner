@@ -1,0 +1,33 @@
+<mujoco>
+  <asset>
+    <texture name="grid" type="2d" builtin="checker" width="300" height="300"
+             rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" mark="edge" markrgb="0.8 0.8 0.8"/>
+    <material name="plate_mat" texture="grid" texrepeat="10 10" reflectance="0.2"/>
+    <material name="ball_mat" rgba="0.8 0.2 0.2 1"/>
+  </asset>
+
+  <option gravity="0 0 -9.81" timestep="0.002"/>
+
+  <worldbody>
+    <geom name="ground" type="plane" size="0 0 0.01" material="plate_mat"/>
+
+    <body name="plate" pos="0 0 0.1">
+      <joint name="tilt_x" type="hinge" axis="-1 0 0" damping="1"/>
+      <joint name="tilt_y" type="hinge" axis="0 1 0" damping="1"/>
+      <geom name="plate_surf" type="box" size="25 25 0.01"
+            material="plate_mat" friction="0.8 0.02 0.3"/>
+    </body>
+
+    <!-- Free bodies must be top-level -->
+    <body name="ball" pos="0 0 0.17">
+      <joint name="ball_free" type="free"/>
+      <geom name="ball_geom" type="sphere" size="1" mass="1"
+            material="ball_mat" friction="0.8 0.02 0.1"/>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="motor_x" joint="tilt_x" ctrlrange="-0.01 0.01"/>
+    <motor name="motor_y" joint="tilt_y" ctrlrange="-0.01 0.01"/>
+  </actuator>
+</mujoco>
